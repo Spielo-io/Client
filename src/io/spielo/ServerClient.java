@@ -7,6 +7,8 @@ import java.net.Socket;
 public class ServerClient extends BaseClient {
 
 	private final short id;
+
+	private long lastHeartbeat;
 	
 	public ServerClient(final Socket socket, final short id) {
 		super(socket);
@@ -24,5 +26,9 @@ public class ServerClient extends BaseClient {
 	
 	public final short getID() {
 		return id;
+	}
+
+	public void setLastHeatbeat(final long currentTimeMillis) {
+		lastHeartbeat = currentTimeMillis;
 	}
 }
