@@ -3,44 +3,32 @@
  */
 package io.spielo;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.Socket;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
-public class Client {
-	private final static int PORT = 8123;
+import io.spielo.tasks.SendHeartbeatTask;
 
-	private final Socket socket;
+public class Client extends BaseClient {
 	
-	public Client(final String ip) {
-		socket = connectSocket(ip);
-	}
+	private final int HEARTBEAT_DELAY = 1000;
 
-	public final void send(Message message) {
-		try {
-			OutputStream out = socket.getOutputStream();
-			out.write(message.toByteArray());
-			out.flush();
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	private int id;
+	private final ScheduledExecutorService executor;
+	
+	public Client(String serverIP) {
+		super(serverIP);
+		
+		executor = Executors.newSingleThreadScheduledExecutor();
+		executor.scheduleWithFixedDelay(new SendHeartbeatTask(this), HEARTBEAT_DELAY, HEARTBEAT_DELAY, TimeUnit.MILLISECONDS);
 	}
 	
-	public final void close() {
-		try {
-			socket.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public final void setID(final int id) {
+		this.id = id;
 	}
-	
-	private final Socket connectSocket(final String ip) {
-		try {
-			return new Socket(ip, PORT);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
+
+	public final int getID() {
+		return id;
 	}
 }
+
