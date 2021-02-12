@@ -50,6 +50,7 @@ public class Client extends BaseClient {
 	
 	@Override
 	public final void close() {
+		readMessageTask.shutdown();
 		executor.shutdownNow();
 		super.close();
 	}

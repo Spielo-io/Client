@@ -3,6 +3,7 @@ package io.spielo.tasks;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,8 @@ import io.spielo.util.BufferHelper;
 
 public class ClientReadMessageTask implements Runnable {
 
+	private Boolean isRunning;
+	
 	private final Socket socket;
 	private final List<ClientEventHandler> subscribers;
 
@@ -23,11 +26,19 @@ public class ClientReadMessageTask implements Runnable {
 	
 	@Override
 	public void run() {
-		while (true) {
+		isRunning = true;
+		while (isRunning) {
 			try {
 				byte[] buffer = readByteBuffer();
 				Message message = getMessageFromBuffer(buffer);
 				notifyMessageReceivec(message);
+			} catch (SocketException e) {
+				if (e.getMessage().equals("Socket closed"))
+					; // Do nothing
+				else {
+					e.printStackTrace();
+				}
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -42,7 +53,11 @@ public class ClientReadMessageTask implements Runnable {
 		subscribers.remove(subscriber);
 	}
 	
-	private byte[] readByteBuffer() throws IOException {
+	public void shutdown() {
+		isRunning = false;
+	}
+	
+	private byte[] readByteBuffer() throws SocketException, IOException {
 		InputStream in = socket.getInputStream();		
 		byte[] buffer = in.readNBytes(2);
 		short length = BufferHelper.fromBufferIntoShort(buffer, 0);
