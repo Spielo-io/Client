@@ -28,7 +28,7 @@ public class BaseClient {
 		}
 	}
 	
-	public final void close() {
+	public void close() {
 		try {
 			socket.close();
 		} catch (IOException e) {
