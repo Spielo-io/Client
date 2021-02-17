@@ -1,0 +1,62 @@
+plugins {
+    id 'java'
+    id('maven-publish')
+    id('java-library')
+}
+
+group 'io.spielo'
+version System.getenv("VERSION")
+
+repositories {
+    mavenCentral()
+}
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+    }
+    test {
+        java {
+            srcDirs = ['tests']
+        }
+    }
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.1'
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.7.1")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.1")
+    testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.7.1")
+}
+
+test {
+    useJUnitPlatform()
+
+    maxHeapSize = '1G'
+    filter {
+        includeTestsMatching "io.spielo.*"
+    }
+    reports.junitXml.destination = file("$buildDir/xml")
+    reports.html.destination = file("$buildDir/html")
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/spielo-io/client")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            groupId 'io.spielo'
+            artifactId 'client'
+            from(components.java)
+        }
+    }
+}
