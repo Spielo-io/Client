@@ -55,4 +55,3 @@ public class Client extends BaseClient {
 		super.close();
 	}
 }
-

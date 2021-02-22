@@ -7,10 +7,10 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.spielo.Message;
-import io.spielo.MessageFactory;
 import io.spielo.events.ClientEventHandler;
-import io.spielo.util.BufferHelper;
+import io.spielo.messages.Message;
+import io.spielo.messages.MessageFactory;
+import io.spielo.messages.util.BufferHelper;
 
 public class ClientReadMessageTask implements Runnable {
 

@@ -1,6 +1,6 @@
 package io.spielo.events;
 
-import io.spielo.Message;
+import io.spielo.messages.Message;
 
 public interface ClientEventHandler {
 	
