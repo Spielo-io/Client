@@ -7,6 +7,10 @@ plugins {
 group 'io.spielo'
 version System.getenv("VERSION")
 
+java {
+    withSourcesJar()
+}
+
 repositories {
     mavenCentral()
     maven {
