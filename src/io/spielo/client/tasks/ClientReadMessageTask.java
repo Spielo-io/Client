@@ -1,27 +1,26 @@
 package io.spielo.client.tasks;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import io.spielo.client.BaseClient;
 import io.spielo.client.events.ClientEventHandler;
 import io.spielo.messages.Message;
 import io.spielo.messages.MessageFactory;
-import io.spielo.messages.util.BufferHelper;
 
 public class ClientReadMessageTask implements Runnable {
 
 	private Boolean isRunning;
 	
-	private final Socket socket;
+	private final BaseClient client;
 	private final List<ClientEventHandler> subscribers;
 
-	public ClientReadMessageTask(final Socket socket) {
-		this.socket = socket;
-		subscribers = new ArrayList<>();
+	public ClientReadMessageTask(final BaseClient client) {
+		this.client = client;
+		subscribers = Collections.synchronizedList(new ArrayList<>());
 	}
 	
 	@Override
@@ -29,7 +28,7 @@ public class ClientReadMessageTask implements Runnable {
 		isRunning = true;
 		while (isRunning) {
 			try {
-				byte[] buffer = readByteBuffer();
+				byte[] buffer = client.readByteBuffer();
 				Message message = getMessageFromBuffer(buffer);
 				notifyMessageReceivec(message);
 			} catch (SocketException e) {
@@ -55,15 +54,6 @@ public class ClientReadMessageTask implements Runnable {
 	
 	public void shutdown() {
 		isRunning = false;
-	}
-	
-	private byte[] readByteBuffer() throws SocketException, IOException {
-		InputStream in = socket.getInputStream();		
-		byte[] buffer = in.readNBytes(2);
-		short length = BufferHelper.fromBufferIntoShort(buffer, 0);
-		buffer = in.readNBytes(length);
-		
-		return buffer;
 	}
 	
 	private Message getMessageFromBuffer(final byte[] buffer) {

@@ -1,18 +1,21 @@
 package io.spielo.client;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 
 import io.spielo.messages.Message;
+import io.spielo.messages.util.BufferHelper;
 
 public class BaseClient {
 	private final static int PORT = 8123;
 
-	protected final Socket socket;
+	protected Socket socket;
 	
-	public BaseClient(final String ip) {
-		socket = connectSocket(ip);
+	public BaseClient() {
+		socket = null;
 	}
 
 	protected BaseClient(final Socket socket) {
@@ -29,6 +32,14 @@ public class BaseClient {
 			e.printStackTrace();
 		}
 	}
+
+	public void connect(final String ip) {
+		try {
+			socket = new Socket(ip, PORT);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	public void close() {
 		try {
@@ -37,13 +48,13 @@ public class BaseClient {
 			e.printStackTrace();
 		}
 	}
-	
-	private final Socket connectSocket(final String ip) {
-		try {
-			return new Socket(ip, PORT);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
+
+	public byte[] readByteBuffer() throws SocketException, IOException {
+		InputStream in = socket.getInputStream();		
+		byte[] buffer = in.readNBytes(2);
+
+		short length = BufferHelper.fromBufferIntoShort(buffer, 0);
+		buffer = in.readNBytes(length);
+		return buffer;
 	}
 }
