@@ -23,6 +23,8 @@
 hs_err_pid*
 /bin/
 
+/build/
+
 .project
 
 #intellij
@@ -31,3 +33,6 @@ hs_err_pid*
 #gradle
 .gradle
 !gradle-wrapper.jar
+
+# Eclipse 
+/.settings/
