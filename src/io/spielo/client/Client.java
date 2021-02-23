@@ -1,15 +1,15 @@
 /**
  * 
  */
-package io.spielo;
+package io.spielo.client;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import io.spielo.events.ClientEventHandler;
-import io.spielo.tasks.ClientReadMessageTask;
-import io.spielo.tasks.SendHeartbeatTask;
+import io.spielo.client.events.ClientEventHandler;
+import io.spielo.client.tasks.ClientReadMessageTask;
+import io.spielo.client.tasks.SendHeartbeatTask;
 
 public class Client extends BaseClient {
 	

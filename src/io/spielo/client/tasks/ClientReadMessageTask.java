@@ -1,4 +1,4 @@
-package io.spielo.tasks;
+package io.spielo.client.tasks;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,7 +7,7 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.spielo.events.ClientEventHandler;
+import io.spielo.client.events.ClientEventHandler;
 import io.spielo.messages.Message;
 import io.spielo.messages.MessageFactory;
 import io.spielo.messages.util.BufferHelper;

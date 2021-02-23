@@ -1,4 +1,4 @@
-package io.spielo;
+package io.spielo.client;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,6 +1,6 @@
-package io.spielo.tasks;
+package io.spielo.client.tasks;
 
-import io.spielo.Client;
+import io.spielo.client.Client;
 import io.spielo.messages.HeartbeatMessage;
 
 public class SendHeartbeatTask implements Runnable {

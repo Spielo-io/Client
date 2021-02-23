@@ -1,4 +1,4 @@
-package io.spielo.events;
+package io.spielo.client.events;
 
 import io.spielo.messages.Message;
 

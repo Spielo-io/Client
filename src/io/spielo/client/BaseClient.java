@@ -1,9 +1,10 @@
-package io.spielo;
+package io.spielo.client;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import io.spielo.Message;
 import io.spielo.messages.Message;
 
 public class BaseClient {
