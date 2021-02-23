@@ -28,7 +28,7 @@ public class ServerClient extends BaseClient {
 		return id;
 	}
 
-	public void setLastHeatbeat(final long currentTimeMillis) {
+	public void setLastHeartbeat(final long currentTimeMillis) {
 		lastHeartbeat = currentTimeMillis;
 	}
 }
