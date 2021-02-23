@@ -37,16 +37,17 @@ public class Client extends BaseClient implements ClientEventSubscriber{
 		readMessageTask = new ClientReadMessageTask(this, publisher);
 		
 		readThread = new Thread(readMessageTask, "Read messages thread");
-		readThread.start();
 		
 		executor = Executors.newSingleThreadScheduledExecutor();
-		executor.scheduleWithFixedDelay(new SendHeartbeatTask(this), HEARTBEAT_DELAY, HEARTBEAT_DELAY, TimeUnit.MILLISECONDS);
 	}
 	
 	@Override
 	public void connect(String ip) {
 		super.connect(ip);
 		
+		readThread.start();
+		executor.scheduleWithFixedDelay(new SendHeartbeatTask(this), HEARTBEAT_DELAY, HEARTBEAT_DELAY, TimeUnit.MILLISECONDS);
+
 		send(new ConnectMessage(System.currentTimeMillis()));
 	}
 	
