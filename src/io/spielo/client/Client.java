@@ -16,6 +16,9 @@ import io.spielo.messages.CreateLobbyMessage;
 import io.spielo.messages.HeartbeatMessage;
 import io.spielo.messages.Message;
 import io.spielo.messages.MessageHeader;
+import io.spielo.messages.lobbysettings.LobbyBestOf;
+import io.spielo.messages.lobbysettings.LobbyGame;
+import io.spielo.messages.lobbysettings.LobbyTimer;
 import io.spielo.messages.types.MessageType1;
 import io.spielo.messages.types.MessageType2;
 import io.spielo.messages.types.MessageType2Lobby;
@@ -55,9 +58,9 @@ public class Client extends BaseClient implements ClientEventSubscriber{
 		send(new HeartbeatMessage(id, System.currentTimeMillis()));
 	}
 	
-	public void createLobby(final Boolean isPublic) {
+	public void createLobby(final Boolean isPublic, final LobbyGame game, final LobbyBestOf bestOf, final LobbyTimer timer) {
 		MessageHeader header = generateHeader(MessageType1.LOBBY, MessageType2Lobby.CREATE);
-		send(new CreateLobbyMessage(header, isPublic, (byte) 0, (byte) 0, (byte) 0));
+		send(new CreateLobbyMessage(header, isPublic, game, timer, bestOf));
 	}
 	
 	public void subscribe(final ClientEventSubscriber subscriber) {
