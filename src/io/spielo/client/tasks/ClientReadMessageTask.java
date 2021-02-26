@@ -1,27 +1,23 @@
 package io.spielo.client.tasks;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.Socket;
 import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.List;
 
-import io.spielo.client.events.ClientEventHandler;
+import io.spielo.client.BaseClient;
+import io.spielo.client.events.ClientEventPublisher;
 import io.spielo.messages.Message;
 import io.spielo.messages.MessageFactory;
-import io.spielo.messages.util.BufferHelper;
 
 public class ClientReadMessageTask implements Runnable {
 
 	private Boolean isRunning;
 	
-	private final Socket socket;
-	private final List<ClientEventHandler> subscribers;
+	private final BaseClient client;
+	private final ClientEventPublisher publisher;
 
-	public ClientReadMessageTask(final Socket socket) {
-		this.socket = socket;
-		subscribers = new ArrayList<>();
+	public ClientReadMessageTask(final BaseClient client, final ClientEventPublisher publisher) {
+		this.client = client;
+		this.publisher = publisher;
 	}
 	
 	@Override
@@ -29,9 +25,7 @@ public class ClientReadMessageTask implements Runnable {
 		isRunning = true;
 		while (isRunning) {
 			try {
-				byte[] buffer = readByteBuffer();
-				Message message = getMessageFromBuffer(buffer);
-				notifyMessageReceivec(message);
+				receiveMessage();
 			} catch (SocketException e) {
 				if (e.getMessage().equals("Socket closed"))
 					; // Do nothing
@@ -45,42 +39,16 @@ public class ClientReadMessageTask implements Runnable {
 		}
 	}
 	
-	public void subscribe(final ClientEventHandler subscriber) {
-		subscribers.add(subscriber);
+	private final void receiveMessage() throws SocketException, IOException {
+		byte[] buffer = client.readByteBuffer();
+		
+		MessageFactory factory = new MessageFactory();
+		Message message = factory.getMessage(buffer);
+		
+		publisher.notifyMessageReceived(message);
 	}
-	
-	public void unsubscribe(final ClientEventHandler subscriber) {
-		subscribers.remove(subscriber);
-	}
-	
+
 	public void shutdown() {
 		isRunning = false;
-	}
-	
-	private byte[] readByteBuffer() throws SocketException, IOException {
-		InputStream in = socket.getInputStream();		
-		byte[] buffer = in.readNBytes(2);
-		short length = BufferHelper.fromBufferIntoShort(buffer, 0);
-		buffer = in.readNBytes(length);
-		
-		return buffer;
-	}
-	
-	private Message getMessageFromBuffer(final byte[] buffer) {
-		MessageFactory factory = new MessageFactory();
-		
-		return factory.getMessage(buffer);
-	}
-	
-	private void notifyMessageReceivec(final Message message) {
-		for (ClientEventHandler subscriber : subscribers) {
-			subscriber.onMessageReceived(message);
-		}
-	}
-	
-	private void notifyDisconnect() {
-		for (ClientEventHandler subscriber : subscribers) {
-			subscriber.onDisconnect();
-		}
 	}
 }

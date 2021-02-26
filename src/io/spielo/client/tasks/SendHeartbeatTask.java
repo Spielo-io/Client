@@ -1,7 +1,6 @@
 package io.spielo.client.tasks;
 
 import io.spielo.client.Client;
-import io.spielo.messages.HeartbeatMessage;
 
 public class SendHeartbeatTask implements Runnable {
 	
@@ -13,6 +12,6 @@ public class SendHeartbeatTask implements Runnable {
 
 	@Override
 	public void run() {
-		client.send(new HeartbeatMessage(client.getID(), System.currentTimeMillis()));
+		client.sendHeartbeat();
 	}
 }

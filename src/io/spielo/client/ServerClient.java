@@ -31,4 +31,8 @@ public class ServerClient extends BaseClient {
 	public void setLastHeartbeat(final long currentTimeMillis) {
 		lastHeartbeat = currentTimeMillis;
 	}
+	
+	public final long getLastHeartbeat() {
+		return lastHeartbeat;
+	}
 }
