@@ -23,7 +23,7 @@ import io.spielo.messages.types.MessageType1;
 import io.spielo.messages.types.MessageType2;
 import io.spielo.messages.types.MessageType2Lobby;
 
-public class Client extends BaseClient implements ClientEventSubscriber{
+public class Client extends BaseClient implements ClientEventSubscriber {
 	
 	private final int HEARTBEAT_DELAY = 1000;
 
@@ -43,7 +43,7 @@ public class Client extends BaseClient implements ClientEventSubscriber{
 		
 		executor = Executors.newSingleThreadScheduledExecutor();
 	}
-	
+
 	@Override
 	public void connect(String ip) {
 		super.connect(ip);
@@ -58,11 +58,6 @@ public class Client extends BaseClient implements ClientEventSubscriber{
 		send(new HeartbeatMessage(id, System.currentTimeMillis()));
 	}
 	
-	public void createLobby(final Boolean isPublic, final LobbyGame game, final LobbyBestOf bestOf, final LobbyTimer timer) {
-		MessageHeader header = generateHeader(MessageType1.LOBBY, MessageType2Lobby.CREATE);
-		send(new CreateLobbyMessage(header, isPublic, game, timer, bestOf));
-	}
-	
 	public void subscribe(final ClientEventSubscriber subscriber) {
 		publisher.subscribe(subscriber);
 	}
@@ -71,6 +66,36 @@ public class Client extends BaseClient implements ClientEventSubscriber{
 		publisher.unsubscribe(subscriber);
 	}
 
+	public void game4Win(final int value) {
+		//MessageHeader header = generateHeader(MessageType1.GAME, MessageType2Game.);
+		// TODO
+	}
+	
+	public void gameTicTacToe(final int value) {
+		// TODO
+	}
+
+	public void createLobby(final Boolean isPublic, final LobbyGame game, final LobbyBestOf bestOf, final LobbyTimer timer, final String username) {
+		MessageHeader header = generateHeader(MessageType1.LOBBY, MessageType2Lobby.CREATE);
+		send(new CreateLobbyMessage(header, isPublic, game, timer, bestOf));
+	}
+	
+	public void lobbySettings(final Boolean isPublic, final LobbyGame game, final LobbyBestOf bestOf, final LobbyTimer timer) {
+		// TODO
+	}
+	
+	public void joinRandomLobby(final String username) {
+		// TODO
+	}
+	
+	public void joinLobby(final String username, final String lobbycode) {
+		// TODO
+	}
+	
+	public void readyToPlay(final Boolean isReady) {
+		// TODO
+	}	
+	
 	@Override
 	public final void close() {
 		readMessageTask.shutdown();
