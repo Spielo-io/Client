@@ -36,7 +36,8 @@ sourceSets {
 }
 
 dependencies {
-    compile "io.spielo:messages:0.3.+"
+    compile "io.spielo:messages:+"
+    compile "io.spielo:messages:+:sources"
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.1'
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.7.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.1")

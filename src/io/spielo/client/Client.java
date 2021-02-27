@@ -12,16 +12,14 @@ import io.spielo.client.events.ClientEventSubscriber;
 import io.spielo.client.tasks.ClientReadMessageTask;
 import io.spielo.client.tasks.SendHeartbeatTask;
 import io.spielo.messages.ConnectMessage;
-import io.spielo.messages.CreateLobbyMessage;
+import io.spielo.messages.lobby.CreateLobbyMessage;
 import io.spielo.messages.HeartbeatMessage;
 import io.spielo.messages.Message;
 import io.spielo.messages.MessageHeader;
 import io.spielo.messages.lobbysettings.LobbyBestOf;
 import io.spielo.messages.lobbysettings.LobbyGame;
 import io.spielo.messages.lobbysettings.LobbyTimer;
-import io.spielo.messages.types.MessageType1;
-import io.spielo.messages.types.MessageType2;
-import io.spielo.messages.types.MessageType2Lobby;
+import io.spielo.messages.types.*;
 
 public class Client extends BaseClient implements ClientEventSubscriber {
 	
@@ -103,11 +101,11 @@ public class Client extends BaseClient implements ClientEventSubscriber {
 		super.close();
 	}
 	
-	public final MessageHeader generateHeader(final MessageType1 type1, final MessageType2 type2) {
+	public final MessageHeader generateHeader(final MessageType1 type1, final ByteEnum type2) {
 		return generateHeader((short) 0, type1, type2);
 	}
 	
-	public final MessageHeader generateHeader(final short receiverID, final MessageType1 type1, final MessageType2 type2) {
+	public final MessageHeader generateHeader(final short receiverID, final MessageType1 type1, final ByteEnum type2) {
 		return new MessageHeader(id, receiverID, type1, type2, System.currentTimeMillis());
 	}
 
