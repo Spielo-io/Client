@@ -11,15 +11,18 @@ import io.spielo.client.events.ClientEventPublisher;
 import io.spielo.client.events.ClientEventSubscriber;
 import io.spielo.client.tasks.ClientReadMessageTask;
 import io.spielo.client.tasks.SendHeartbeatTask;
-import io.spielo.messages.ConnectMessage;
-import io.spielo.messages.lobby.CreateLobbyMessage;
-import io.spielo.messages.HeartbeatMessage;
 import io.spielo.messages.Message;
 import io.spielo.messages.MessageHeader;
+import io.spielo.messages.lobby.CreateLobbyMessage;
 import io.spielo.messages.lobbysettings.LobbyBestOf;
 import io.spielo.messages.lobbysettings.LobbyGame;
+import io.spielo.messages.lobbysettings.LobbySettings;
 import io.spielo.messages.lobbysettings.LobbyTimer;
-import io.spielo.messages.types.*;
+import io.spielo.messages.server.ConnectMessage;
+import io.spielo.messages.server.HeartbeatMessage;
+import io.spielo.messages.types.ByteEnum;
+import io.spielo.messages.types.MessageType1;
+import io.spielo.messages.types.MessageType2Lobby;
 
 public class Client extends BaseClient implements ClientEventSubscriber {
 	
@@ -56,6 +59,12 @@ public class Client extends BaseClient implements ClientEventSubscriber {
 		send(new HeartbeatMessage(id, System.currentTimeMillis()));
 	}
 	
+	public void createLobby(final Boolean isPublic, final LobbyGame game, final LobbyBestOf bestOf, final LobbyTimer timer, String username) {
+		MessageHeader header = generateHeader(MessageType1.LOBBY, MessageType2Lobby.CREATE);
+		LobbySettings settings = new LobbySettings(isPublic, game, timer, bestOf);
+		send(new CreateLobbyMessage(header, settings, username));
+	}
+	
 	public void subscribe(final ClientEventSubscriber subscriber) {
 		publisher.subscribe(subscriber);
 	}
@@ -71,11 +80,6 @@ public class Client extends BaseClient implements ClientEventSubscriber {
 	
 	public void gameTicTacToe(final int value) {
 		// TODO
-	}
-
-	public void createLobby(final Boolean isPublic, final LobbyGame game, final LobbyBestOf bestOf, final LobbyTimer timer, final String username) {
-		MessageHeader header = generateHeader(MessageType1.LOBBY, MessageType2Lobby.CREATE);
-		send(new CreateLobbyMessage(header, isPublic, game, timer, bestOf));
 	}
 	
 	public void lobbySettings(final Boolean isPublic, final LobbyGame game, final LobbyBestOf bestOf, final LobbyTimer timer) {
