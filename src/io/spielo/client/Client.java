@@ -19,6 +19,7 @@ import io.spielo.messages.lobby.CreateLobbyMessage;
 import io.spielo.messages.lobby.JoinLobbyMessage;
 import io.spielo.messages.lobby.LobbyListRequestMessage;
 import io.spielo.messages.lobby.LobbySettingsMessage;
+import io.spielo.messages.lobby.ReadyToPlayMessage;
 import io.spielo.messages.lobbysettings.LobbyBestOf;
 import io.spielo.messages.lobbysettings.LobbyGame;
 import io.spielo.messages.lobbysettings.LobbySettings;
@@ -116,7 +117,9 @@ public class Client extends BaseClient implements ClientEventSubscriber {
 	}
 	
 	public void readyToPlay(final Boolean isReady) {
-		// TODO
+		MessageHeader header = generateHeader(MessageType1.LOBBY, MessageType2Lobby.LOBBY_IS_READY);
+		ReadyToPlayMessage message = new ReadyToPlayMessage(header, isReady);
+		send(message);
 	}	
 
 	public void sendHeartbeat() {
