@@ -15,11 +15,7 @@ import io.spielo.messages.Message;
 import io.spielo.messages.MessageHeader;
 import io.spielo.messages.games.TicTacToeMessage;
 import io.spielo.messages.games.Win4Message;
-import io.spielo.messages.lobby.CreateLobbyMessage;
-import io.spielo.messages.lobby.JoinLobbyMessage;
-import io.spielo.messages.lobby.LobbyListRequestMessage;
-import io.spielo.messages.lobby.LobbySettingsMessage;
-import io.spielo.messages.lobby.ReadyToPlayMessage;
+import io.spielo.messages.lobby.*;
 import io.spielo.messages.lobbysettings.LobbyBestOf;
 import io.spielo.messages.lobbysettings.LobbyGame;
 import io.spielo.messages.lobbysettings.LobbySettings;
@@ -106,6 +102,13 @@ public class Client extends BaseClient implements ClientEventSubscriber {
 		MessageHeader header = generateHeader(MessageType1.LOBBY, MessageType2Lobby.JOIN);
 		JoinLobbyMessage message = new JoinLobbyMessage(header, lobbycode, username);
 		
+		send(message);
+	}
+
+	public void leaveLobby() {
+		MessageHeader header = generateHeader(MessageType1.LOBBY, MessageType2Lobby.LEAVE);
+		LeaveLobbyMessage message = new LeaveLobbyMessage(header);
+
 		send(message);
 	}
 	
