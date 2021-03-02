@@ -15,17 +15,24 @@ import io.spielo.messages.Message;
 import io.spielo.messages.MessageHeader;
 import io.spielo.messages.games.TicTacToeMessage;
 import io.spielo.messages.games.Win4Message;
-import io.spielo.messages.lobby.*;
+import io.spielo.messages.lobby.CreateLobbyMessage;
+import io.spielo.messages.lobby.JoinLobbyMessage;
+import io.spielo.messages.lobby.LeaveLobbyMessage;
+import io.spielo.messages.lobby.LobbyListRequestMessage;
+import io.spielo.messages.lobby.LobbySettingsMessage;
+import io.spielo.messages.lobby.ReadyToPlayMessage;
 import io.spielo.messages.lobbysettings.LobbyBestOf;
 import io.spielo.messages.lobbysettings.LobbyGame;
 import io.spielo.messages.lobbysettings.LobbySettings;
 import io.spielo.messages.lobbysettings.LobbyTimer;
 import io.spielo.messages.server.ConnectMessage;
+import io.spielo.messages.server.DisconnectMessage;
 import io.spielo.messages.server.HeartbeatMessage;
 import io.spielo.messages.types.ByteEnum;
 import io.spielo.messages.types.MessageType1;
 import io.spielo.messages.types.MessageType2Game;
 import io.spielo.messages.types.MessageType2Lobby;
+import io.spielo.messages.types.MessageType2Server;
 
 public class Client extends BaseClient implements ClientEventSubscriber {
 	
@@ -131,6 +138,9 @@ public class Client extends BaseClient implements ClientEventSubscriber {
 		
 	@Override
 	public final void close() {
+		MessageHeader header = generateHeader(MessageType1.SERVER, MessageType2Server.DISCONNECT);
+		send(new DisconnectMessage(header));
+		
 		readMessageTask.shutdown();
 		executor.shutdownNow();
 		super.close();
