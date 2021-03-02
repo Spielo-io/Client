@@ -99,7 +99,7 @@ public class Client extends BaseClient implements ClientEventSubscriber {
 	}
 	
 	public void joinRandomLobby(final String username) {
-		joinLobby(username, "");
+		joinLobby(username, null);
 	}
 	
 	public void joinLobby(final String username, final String lobbycode) {
